@@ -1,0 +1,5 @@
+.DS_Store
+data/*.json.gz
+amazon_products/
+**/__pycache__/
+__pycache__/
