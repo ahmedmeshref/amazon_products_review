@@ -32,10 +32,7 @@ if __name__ == "__main__":
         p = x[y==y_i].sum(0)
         return (p+1) / ((y==y_i).sum()+1)
 
-    category_names = ['Automotive', 'Baby', 'Clothing_Shoes_and_Jewelry',
-                      'Digital_Music', 'Electronics', 'Grocery_and_Gourmet_Food',
-                      'Home_and_Kitchen', 'Kindle_Store', 'Pet_Supplies',
-                      'Sports_and_Outdoors', 'Toys_and_Games', 'Video_Games']
+    category_names = ['Sports_and_Outdoors', 'Automotive']
 
     for name in category_names:
         fileloc = 'data/reviews_' + name + '_5.json.gz'
@@ -52,11 +49,11 @@ if __name__ == "__main__":
         x = vec.fit_transform(treated_text)
         y = (df['overall'] > 3).astype(float).values
         r = sparse.csr_matrix(np.log(pr(x,1,y) / pr(x,0,y)))
-        clf = LogisticRegression(C = 10, dual=True, penalty = "l2", n_jobs = -1)
+        clf = LogisticRegression(C = 10, dual=False, penalty = "l2", n_jobs = -1)
         x_nb = x.multiply(r)
         clf.fit(x_nb, y)
         # pickle your model for each category
-        model_loc = 'models/reviews_' + name + "_5.json.gz_model.pkl"
+        model_loc = 'models/reviews_' + name + "_5.json.gz_model.pkl" # Done
         vec_loc = 'models/reviews_' + name + "_5.json.gz_vector.pkl"
         r_loc = 'models/reviews_' + name + "_5.json.gz_r.npz"
         joblib.dump(clf, model_loc)

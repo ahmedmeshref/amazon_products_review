@@ -1,5 +1,4 @@
 import logging
-import json
 import numpy as np
 import re
 import string
@@ -15,23 +14,17 @@ from . import app
 
 logger = logging.getLogger('app')
 
+
+# Flask form 
 class PredictForm(FlaskForm):
-    category = fields.SelectField('Category', choices=[ ('Automotive', 'Automotive'),
-                                                        ('Baby', 'Baby'),
-                                                        ('Clothing_Shoes_and_Jewelry', 'Clothing Shoes and Jewelry'),	
-                                                        ('Digital_Music', 'Digital Music'),	
-                                                        ('Electronics', 'Electronics'),	
-                                                        ('Grocery_and_Gourmet_Food', 'Grocery and Gourmet Food'),	
-                                                        ('Home_and_Kitchen', 'Home and Kitchen'),	
-                                                        ('Kindle_Store', 'Kindle Store'), 	
-                                                        ('Pet_Supplies', 'Pet Supplies'),	
-                                                        ('Sports_and_Outdoors', 'Sports and Outdoors'),	
-                                                        ('Toys_and_Games', 'Toys and Games'),	
-                                                        ('Video_Games', 'Video Games') ], validators=[InputRequired()])
+    category = fields.SelectField('Category', choices=[ ('Sports_and_Outdoors', 'Sports and Outdoors'),	
+                                                        ('Automotive', 'Automotive')], validators=[InputRequired()])
     review = fields.TextAreaField('Review:', validators=[InputRequired()])
 
     submit = fields.SubmitField('Submit')
 
+
+# Get request handler
 @app.get('/')
 def home():
     form = PredictForm()
@@ -40,8 +33,11 @@ def home():
         prediction=None,
         prob = None)
 
+
+# Post request handler
 @app.post('/')
 def predictions():
+    # Get form data
     form = PredictForm()
     target_names = ['Negative', 'Positive']    
     my_proba = None
@@ -49,10 +45,7 @@ def predictions():
     # store the submitted values
     submitted_data = form.data
     category = submitted_data['category']
-    category_names = ['Automotive', 'Baby', 'Clothing_Shoes_and_Jewelry',
-                    'Digital_Music', 'Electronics', 'Grocery_and_Gourmet',
-                    'Home_and_Kitchen', 'Kindle_Store', 'Pet_Supplies',
-                    'Sports_and_Outdoors', 'Toys_and_Games', 'Video_Games']
+    category_names = ['Sports_and_Outdoors', 'Automotive']
 
     # Retrieve values from form
     review = re.compile(f'([{string.punctuation}“”¨«»®´·º½¾¿¡§£₤‘’])').sub(r' \1 ', submitted_data['review'])

@@ -1,4 +1,6 @@
-WTF_CSRF_ENABLED = True
-SECRET_KEY = 'you-will-never-guess'
+import os
 
-debug = True
+
+SECRET_KEY = os.urandom(32)
+WTF_CSRF_ENABLED = True
+SQLALCHEMY_TRACK_MODIFICATIONS = False
